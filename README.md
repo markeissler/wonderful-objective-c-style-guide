@@ -1,8 +1,10 @@
-# Mixtur Objective-C style guide.
+# Wonderful Objective-C style guide.
 
-This style guide outlines the coding conventions of the OSX and iOS team at Mixtur. This guide is just a more comprehensive and also more specific than the individual guides from which we drew our inspiration.
+This style guide outlines the OSX and iOS coding conventions that I like to follow. The conventions focus on readability by restoring some tried and tested formatting conventions that have somehow given way to overzealously compacted code over recent years. The irony is that today our computers are faster than ever and our optimizing compilers are awesome. No performance is lost in adding extra newlines and allocating additional local variables but efficiency gains can be tremendous.
 
-We welcome your feedback in issues and pull requests.
+This guide is more comprehensive and also more specific than the individual guides from which I drew my inspiration. I believe it is pretty feature complete right now and ready to be applied to your own code or to that of your organization.
+
+I welcome your feedback in issues and pull requests.
 
 ## Introduction
 
