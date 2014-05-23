@@ -25,6 +25,36 @@ Here are some of the documents from Apple that informed the style guide. If some
 * [Coding Guidelines for Cocoa](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html)
 * [iOS App Programming Guide](http://developer.apple.com/library/ios/#documentation/iphone/conceptual/iphoneosprogrammingguide/Introduction/Introduction.html)
 
+## Tools
+
+To assist with the application of the conventions defined herein, I have created an uncrustify config file (".uncrustify.cfg") that, for the most part, can automatically reformat your code for you and can be used in conjunction with the [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) plugin.
+
+**NOTE:** I have forked [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) and added the capability to detect a configuration file named ".uncrustify.cfg" located in your project's top directory. At this time, you will have to build and install this fork manually but a pull request has been made so hopefully these changes might head upstream soon.
+
+```
+	>cd YOUR_WORKING_DIR
+	>git clone git@github.com:markeissler/BBUncrustifyPlugin-Xcode.git
+	>git checkout -b feature/local-dot-config origin/feature/local-dot-config
+	>open BBUncrustifyPlugin.xcodeproj
+```
+
+After cloning the repo and switching to the feature branch noted, follow these steps:
+
+* Build with Xcode. The plugin will install automatically.
+* Restart Xcode.
+* Configure BBUncrustifyPlugin:
+
+```
+Edit->Format Code->BBUncrustifyPlugin Preferences...
+```
+
+As seen here:
+![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/uncrustify_pref_page_sm.png)
+
+Download this project fork from GitHub:
+
+[BBUncrustifyPlugin-Xcode Fork with ".uncrustify.cfg" support](https://github.com/markeissler/BBUncrustifyPlugin-Xcode)
+
 ## Table of Contents
 
 * [Language](#language)
@@ -139,14 +169,14 @@ Although really big computer displays are the norm these days as they help boost
 
 Line width is currently restricted to 80 columns. Xcode should be configured to display a Page Guide at 80 columns to assist with manual formatting:
 
-	Preferences->Text Editing->Page Guide at column: 
+```
+Preferences->Text Editing->Page Guide at column:
+```
 
 As seen here:
 ![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/pref_page_guide_sm.png)
 
 Objective-C is a verbose language. Selectors can be very long. The recommendation is to use an Xcode plugin along with a formatting configuration to facilitate the reformatting of code to comply with this guide.
-
-**SEE TOOLS BELOW -- PENDING**
 
 ## Spacing
 
@@ -997,6 +1027,7 @@ If an error has occurred, the value of the NSError object will generally refer t
 NSError *error;
 BOOL success;
 success = [self trySomethingWithError:&error];
+
 if (!success) {
   // Handle Error
   // e.g.
@@ -1008,6 +1039,7 @@ if (!success) {
 
 ```objc
 NSError *error;
+
 if (![self trySomethingWithError:&error]) {
   // Handle Error
 }
