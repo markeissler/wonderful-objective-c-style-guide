@@ -457,9 +457,16 @@ typedef NSInteger PlayerState;
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. 
 
-An exception to this: inside initializers, the backing instance variable (i.e. `_variableName`) should be used directly to avoid any potential side effects of the getters/setters.
+There are a couple of exceptions to this rule:
 
-Local variables should not contain underscores.
+* Setup and Tear down: init and dealloc
+* NSCoding Protocol: encodeWithCoder and initWithCoder
+
+Whenever the object is in an unstable state (e.g. during setup and tear down) you should access the backing instance variable (i.e. `_variableName`) directly to avoid any potential side effects of the getters/setters. For one opinion on this practice, see: [Don’t Message self in Objective-C init (or dealloc)](http://qualitycoding.org/objective-c-init/).
+
+Whenever you are attempting to archive and unarchive an object, you are likely intending to capture and restore the exact values of the internal data members; therefore, in those cases you should access th instance variables directly to avoid setting/restoring values that would otherwise be mutated through getters/setters.
+
+Finally, local variables should not contain underscores.
 
 ## Methods
 
