@@ -86,6 +86,7 @@ Download this project fork from GitHub:
 * [Conditionals](#conditionals)
 	* [Conditional Expressions](#conditional-expressions)
     * [Ternary Operator](#ternary-operator)
+* [Return Statements](#return-statements)
 * [Init Methods](#init-methods)
 * [Class Constructor Methods](#class-constructor-methods)
 * [CGRect Functions](#cgrect-functions)
@@ -935,6 +936,29 @@ result = a > b ? x = c > d ? c : d : y;
 
 result = isHorizontal ? x : y;
 ```
+
+## Return Statements
+The expression evaluated in a return statement should generally consist of variables and not complex method calls. It should always be immediately obvious as to what the returned value represents and how it has been derived. Forming a return statement with an expression that includes a call to one or more methods with complex selectors is never a good idea. As with [Conditional Expressions](#conditional-expressions), collect your evaluation criteria, and then evaluate in the expression.
+
+**Preferred:**
+
+```objc
+- (BOOL) playNext
+{
+  BOOL continuousPlayEnabled = [[MediaAppPrefs sharedInstance] continuousPlay];
+  MediaAppTrack *nextMediaTrack = [MediaAppPlayer nextTrack];
+  
+  return (continuousPlayEnabled && nextMediaTrack);}  
+```
+
+**Not Preferred:**
+
+```objc
+- (BOOL) playNext
+{
+  return ([[MediaAppPrefs sharedInstance] continuousPlay] && [MediaAppPlayer nextTrack]);}  
+```
+
 
 ## Init Methods
 
