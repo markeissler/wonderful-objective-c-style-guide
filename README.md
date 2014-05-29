@@ -175,7 +175,7 @@ Preferences->Text Editing->Page Guide at column:
 ```
 
 As seen here:
-![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/pref_page_guide_sm.png)
+![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/pref_page_guide_sm-2.png)
 
 Objective-C is a verbose language. Selectors can be very long. The recommendation is to use an Xcode plugin along with a formatting configuration to facilitate the reformatting of code to comply with this guide.
 
@@ -458,12 +458,15 @@ typedef NSInteger PlayerState;
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. 
 
-There are a couple of exceptions to this rule:
+These are some notable exceptions to this rule:
 
 * Setup and Tear down: init and dealloc
-* NSCoding Protocol: encodeWithCoder and initWithCoder
+* Overriding accessors (getters/setters)
+* Archiving activities: e.g. NSCoding Protocol's encodeWithCoder and initWithCoder
 
 Whenever the object is in an unstable state (e.g. during setup and tear down) you should access the backing instance variable (i.e. `_variableName`) directly to avoid any potential side effects of the getters/setters. For one opinion on this practice, see: [Don’t Message self in Objective-C init (or dealloc)](http://qualitycoding.org/objective-c-init/).
+
+Whenever you elect to override a getter/setter to provide a custom implementation (instead of the one provided by synthesis) you will need to access the backing instance variables directly to avoid a runtime loop.
 
 Whenever you are attempting to archive and unarchive an object, you are likely intending to capture and restore the exact values of the internal data members; therefore, in those cases you should access th instance variables directly to avoid setting/restoring values that would otherwise be mutated through getters/setters.
 
