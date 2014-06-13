@@ -27,9 +27,20 @@ Here are some of the documents from Apple that informed the style guide. If some
 
 ## Tools
 
-To assist with the application of the conventions defined herein, I have created an uncrustify config file (".uncrustify.cfg") that, for the most part, can automatically reformat your code for you and can be used in conjunction with the [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) plugin.
+To assist with the application of the conventions defined herein, I have created an [uncrustify](https://github.com/bengardner/uncrustify) config file (".uncrustify.cfg") that, for the most part, can automatically reformat your code for you and can be used in conjunction with the [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) plugin. My suggestion is to drop that config file into your project's top directory so that the formatting style is maintained along side the project itself.
+
+**NOTE:** By default, uncrustify does not look for a .uncrustify.cfg file in your project directory. You can specify that location when using uncrustify from the command line with the "-c" flag. If using the Xcode plugin mentioned below you will need to make sure to build and install my forked version until 2.0.4 has been released.
+
+### Why Uncrustify and not Clang-Format?
+
+Let's just get this out of the way right now. While clang-format has come along quite nicely, when it comes down to configurability [uncrustify](https://github.com/bengardner/uncrustify) wins by a great margin. This is especially true for auto formatting objective-c code. Believe me, I started with writing a clang-format config file to support this project, but I quickly learned it wasn't possible to specify all of the formatting requirements.
+
+### BBUncrustifyPlugin-Xcode
+To make it easier to use the supplied uncrustify config file, I suggest installing the excellent [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode). That way you can reformat code live from within Xcode.
 
 **NOTE:** I have forked [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) and added the capability to detect a configuration file named ".uncrustify.cfg" located in your project's top directory. At this time, you will have to build and install this fork manually but a pull request has been made so hopefully these changes might head upstream soon.
+
+*[Update: My code changes have been pulled into the upstream repo and I anticipate that a forthcoming 2.0.4 release will include these updates. For now, you still need to build manually.]*
 
 ```
 	>cd YOUR_WORKING_DIR
@@ -54,6 +65,16 @@ As seen here:
 Download this project fork from GitHub:
 
 [BBUncrustifyPlugin-Xcode Fork with ".uncrustify.cfg" support](https://github.com/markeissler/BBUncrustifyPlugin-Xcode)
+
+### Uncrustify 0.61-snapshot
+
+The current distributed version of [uncrustify](https://github.com/bengardner/uncrustify) has some bugs when it comes to formatting objective-c code properly, specifically messages and blocks. I have been working on fixes. :)
+
+While the [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) comes with its own build of uncrustify, I suggest you [download my snapshot build](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip) and install it in place of the binary used by the Xcode plugin. You should then use the ".uncrustify-061.cfg" config file (make sure you rename it to just ".uncrustify.cfg").
+
+Download my latest uncrustify snapshot:
+
+[uncrustify-0.61-snapshot.zip](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip)
 
 ## Table of Contents
 
