@@ -27,9 +27,20 @@ Here are some of the documents from Apple that informed the style guide. If some
 
 ## Tools
 
-To assist with the application of the conventions defined herein, I have created an uncrustify config file (".uncrustify.cfg") that, for the most part, can automatically reformat your code for you and can be used in conjunction with the [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) plugin.
+To assist with the application of the conventions defined herein, I have created an [uncrustify](https://github.com/bengardner/uncrustify) config file (".uncrustify.cfg") that, for the most part, can automatically reformat your code for you and can be used in conjunction with the [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) plugin. My suggestion is to drop that config file into your project's top directory so that the formatting style is maintained along side the project itself.
+
+**NOTE:** By default, uncrustify does not look for a .uncrustify.cfg file in your project directory. You can specify that location when using uncrustify from the command line with the "-c" flag. If using the Xcode plugin mentioned below you will need to make sure to build and install my forked version until 2.0.4 has been released.
+
+### Why Uncrustify and not Clang-Format?
+
+Let's just get this out of the way right now. While clang-format has come along quite nicely, when it comes down to configurability [uncrustify](https://github.com/bengardner/uncrustify) wins by a great margin. This is especially true for auto formatting objective-c code. Believe me, I started with writing a clang-format config file to support this project, but I quickly learned it wasn't possible to specify all of the formatting requirements.
+
+### BBUncrustifyPlugin-Xcode
+To make it easier to use the supplied uncrustify config file, I suggest installing the excellent [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode). That way you can reformat code live from within Xcode.
 
 **NOTE:** I have forked [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) and added the capability to detect a configuration file named ".uncrustify.cfg" located in your project's top directory. At this time, you will have to build and install this fork manually but a pull request has been made so hopefully these changes might head upstream soon.
+
+*[Update: My code changes have been pulled into the upstream repo and I anticipate that a forthcoming 2.0.4 release will include these updates. For now, you still need to build manually.]*
 
 ```
 	>cd YOUR_WORKING_DIR
@@ -54,6 +65,16 @@ As seen here:
 Download this project fork from GitHub:
 
 [BBUncrustifyPlugin-Xcode Fork with ".uncrustify.cfg" support](https://github.com/markeissler/BBUncrustifyPlugin-Xcode)
+
+### Uncrustify 0.61-snapshot
+
+The current distributed version of [uncrustify](https://github.com/bengardner/uncrustify) has some bugs when it comes to formatting objective-c code properly, specifically messages and blocks. I have been working on fixes. :)
+
+While the [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) comes with its own build of uncrustify, I suggest you [download my snapshot build](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip) and install it in place of the binary used by the Xcode plugin. You should then use the ".uncrustify-061.cfg" config file (make sure you rename it to just ".uncrustify.cfg").
+
+Download my latest uncrustify snapshot:
+
+[uncrustify-0.61-snapshot.zip](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip)
 
 ## Table of Contents
 
@@ -86,6 +107,7 @@ Download this project fork from GitHub:
 * [Conditionals](#conditionals)
 	* [Conditional Expressions](#conditional-expressions)
     * [Ternary Operator](#ternary-operator)
+* [Return Statements](#return-statements)
 * [Init Methods](#init-methods)
 * [Class Constructor Methods](#class-constructor-methods)
 * [CGRect Functions](#cgrect-functions)
@@ -174,7 +196,7 @@ Preferences->Text Editing->Page Guide at column:
 ```
 
 As seen here:
-![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/pref_page_guide_sm.png)
+![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/pref_page_guide_sm-2.png)
 
 Objective-C is a verbose language. Selectors can be very long. The recommendation is to use an Xcode plugin along with a formatting configuration to facilitate the reformatting of code to comply with this guide.
 
@@ -457,9 +479,19 @@ typedef NSInteger PlayerState;
 
 When using properties, instance variables should always be accessed and mutated using `self.`. This means that all properties will be visually distinct, as they will all be prefaced with `self.`. 
 
-An exception to this: inside initializers, the backing instance variable (i.e. `_variableName`) should be used directly to avoid any potential side effects of the getters/setters.
+These are some notable exceptions to this rule:
 
-Local variables should not contain underscores.
+* Setup and Tear down: init and dealloc
+* Overriding accessors (getters/setters)
+* Archiving activities: e.g. NSCoding Protocol's encodeWithCoder and initWithCoder
+
+Whenever the object is in an unstable state (e.g. during setup and tear down) you should access the backing instance variable (i.e. `_variableName`) directly to avoid any potential side effects of the getters/setters. For one opinion on this practice, see: [Don’t Message self in Objective-C init (or dealloc)](http://qualitycoding.org/objective-c-init/).
+
+Whenever you elect to override a getter/setter to provide a custom implementation (instead of the one provided by synthesis) you will need to access the backing instance variables directly to avoid a runtime loop.
+
+Whenever you are attempting to archive and unarchive an object, you are likely intending to capture and restore the exact values of the internal data members; therefore, in those cases you should access th instance variables directly to avoid setting/restoring values that would otherwise be mutated through getters/setters.
+
+Finally, local variables should not contain underscores.
 
 ## Methods
 
@@ -928,6 +960,29 @@ result = a > b ? x = c > d ? c : d : y;
 
 result = isHorizontal ? x : y;
 ```
+
+## Return Statements
+The expression evaluated in a return statement should generally consist of variables and not complex method calls. It should always be immediately obvious as to what the returned value represents and how it has been derived. Forming a return statement with an expression that includes a call to one or more methods with complex selectors is never a good idea. As with [Conditional Expressions](#conditional-expressions), collect your evaluation criteria, and then evaluate in the expression.
+
+**Preferred:**
+
+```objc
+- (BOOL) playNext
+{
+  BOOL continuousPlayEnabled = [[MediaAppPrefs sharedInstance] continuousPlay];
+  MediaAppTrack *nextMediaTrack = [MediaAppPlayer nextTrack];
+  
+  return (continuousPlayEnabled && nextMediaTrack);}  
+```
+
+**Not Preferred:**
+
+```objc
+- (BOOL) playNext
+{
+  return ([[MediaAppPrefs sharedInstance] continuousPlay] && [MediaAppPlayer nextTrack]);}  
+```
+
 
 ## Init Methods
 
