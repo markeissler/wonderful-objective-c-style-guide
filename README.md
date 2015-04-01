@@ -1149,6 +1149,18 @@ Singleton objects should use a thread-safe pattern for creating their shared ins
 
 This will prevent [possible and sometimes prolific crashes](http://cocoasamurai.blogspot.com/2011/04/singletons-your-doing-them-wrong.html).
 
+An optional addition to the above standard pattern is the following:
+
+```objc
+- (void)dealloc {
+
+    // implement -dealloc & remove abort() when refactoring for
+    // non-singleton use.
+    abort();
+}
+```
+
+The idea behind adding the `dealloc()` method is to provide one more defensive measure since a `dealloc` message should never be sent to a Singleton in the first place. The logic is explained in a [StackOverflow thread](http://stackoverflow.com/a/7599682).
 
 ## Line Breaks
 
