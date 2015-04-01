@@ -36,22 +36,10 @@ To assist with the application of the conventions defined herein, I have created
 Let's just get this out of the way right now. While clang-format has come along quite nicely, when it comes down to configurability [uncrustify](https://github.com/bengardner/uncrustify) wins by a great margin. This is especially true for auto formatting objective-c code. Believe me, I started with writing a clang-format config file to support this project, but I quickly learned it wasn't possible to specify all of the formatting requirements.
 
 ### BBUncrustifyPlugin-Xcode
-To make it easier to use the supplied uncrustify config file, I suggest installing the excellent [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode). That way you can reformat code live from within Xcode.
+To make it easier to use the supplied uncrustify config file, I suggest installing the excellent [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) so you can reformat code live from within Xcode. You can install [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) manually or via the [Alcatraz Xcode package manager](http://alcatraz.io).
 
-**NOTE:** I have forked [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) and added the capability to detect a configuration file named ".uncrustify.cfg" located in your project's top directory. At this time, you will have to build and install this fork manually but a pull request has been made so hopefully these changes might head upstream soon.
+Once [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) has been installed, follow these steps:
 
-*[Update: My code changes have been pulled into the upstream repo and I anticipate that a forthcoming 2.0.4 release will include these updates. For now, you still need to build manually.]*
-
-```
-	>cd YOUR_WORKING_DIR
-	>git clone git@github.com:markeissler/BBUncrustifyPlugin-Xcode.git
-	>git checkout -b feature/local-dot-config origin/feature/local-dot-config
-	>open BBUncrustifyPlugin.xcodeproj
-```
-
-After cloning the repo and switching to the feature branch noted, follow these steps:
-
-* Build with Xcode. The plugin will install automatically.
 * Restart Xcode.
 * Configure BBUncrustifyPlugin:
 
@@ -62,15 +50,12 @@ Edit->Format Code->BBUncrustifyPlugin Preferences...
 As seen here:
 ![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/uncrustify_pref_page_sm.png)
 
-Download this project fork from GitHub:
-
-[BBUncrustifyPlugin-Xcode Fork with ".uncrustify.cfg" support](https://github.com/markeissler/BBUncrustifyPlugin-Xcode)
 
 ### Uncrustify 0.61-snapshot
 
-The current distributed version of [uncrustify](https://github.com/bengardner/uncrustify) has some bugs when it comes to formatting objective-c code properly, specifically messages and blocks. I have been working on fixes. :)
+The current distributed version of [uncrustify](https://github.com/bengardner/uncrustify) has some _shortcomings_ when it comes to formatting objective-c code properly, specifically messages and blocks. I have been working on fixes. :)
 
-While the [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) comes with its own build of uncrustify, I suggest you [download my snapshot build](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip) and install it in place of the binary used by the Xcode plugin. You should then use the ".uncrustify-061.cfg" config file (make sure you rename it to just ".uncrustify.cfg").
+While the [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) comes with its own build of uncrustify, I suggest you [download my snapshot build](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip) and install it in place of the binary used by the Xcode plugin. You should then use the ".uncrustify-061.cfg" config file (make sure you rename it to just ".uncrustify.cfg").
 
 Download my latest uncrustify snapshot:
 
