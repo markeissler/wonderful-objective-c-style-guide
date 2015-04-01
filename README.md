@@ -36,22 +36,10 @@ To assist with the application of the conventions defined herein, I have created
 Let's just get this out of the way right now. While clang-format has come along quite nicely, when it comes down to configurability [uncrustify](https://github.com/bengardner/uncrustify) wins by a great margin. This is especially true for auto formatting objective-c code. Believe me, I started with writing a clang-format config file to support this project, but I quickly learned it wasn't possible to specify all of the formatting requirements.
 
 ### BBUncrustifyPlugin-Xcode
-To make it easier to use the supplied uncrustify config file, I suggest installing the excellent [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode). That way you can reformat code live from within Xcode.
+To make it easier to use the supplied uncrustify config file, I suggest installing the excellent [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) so you can reformat code live from within Xcode. You can install [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) manually or via the [Alcatraz Xcode package manager](http://alcatraz.io).
 
-**NOTE:** I have forked [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) and added the capability to detect a configuration file named ".uncrustify.cfg" located in your project's top directory. At this time, you will have to build and install this fork manually but a pull request has been made so hopefully these changes might head upstream soon.
+Once [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) has been installed, follow these steps:
 
-*[Update: My code changes have been pulled into the upstream repo and I anticipate that a forthcoming 2.0.4 release will include these updates. For now, you still need to build manually.]*
-
-```
-	>cd YOUR_WORKING_DIR
-	>git clone git@github.com:markeissler/BBUncrustifyPlugin-Xcode.git
-	>git checkout -b feature/local-dot-config origin/feature/local-dot-config
-	>open BBUncrustifyPlugin.xcodeproj
-```
-
-After cloning the repo and switching to the feature branch noted, follow these steps:
-
-* Build with Xcode. The plugin will install automatically.
 * Restart Xcode.
 * Configure BBUncrustifyPlugin:
 
@@ -62,15 +50,12 @@ Edit->Format Code->BBUncrustifyPlugin Preferences...
 As seen here:
 ![Xcode Page Guide Pref](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/img/uncrustify_pref_page_sm.png)
 
-Download this project fork from GitHub:
-
-[BBUncrustifyPlugin-Xcode Fork with ".uncrustify.cfg" support](https://github.com/markeissler/BBUncrustifyPlugin-Xcode)
 
 ### Uncrustify 0.61-snapshot
 
-The current distributed version of [uncrustify](https://github.com/bengardner/uncrustify) has some bugs when it comes to formatting objective-c code properly, specifically messages and blocks. I have been working on fixes. :)
+The current distributed version of [uncrustify](https://github.com/bengardner/uncrustify) has some _shortcomings_ when it comes to formatting objective-c code properly, specifically messages and blocks. I have been working on fixes. :)
 
-While the [BBUncrustifyPlugin-Xcode](https://github.com/markeissler/BBUncrustifyPlugin-Xcode) comes with its own build of uncrustify, I suggest you [download my snapshot build](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip) and install it in place of the binary used by the Xcode plugin. You should then use the ".uncrustify-061.cfg" config file (make sure you rename it to just ".uncrustify.cfg").
+While the [BBUncrustifyPlugin-Xcode](https://github.com/benoitsan/BBUncrustifyPlugin-Xcode) comes with its own build of uncrustify, I suggest you [download my snapshot build](http://mix-pub-dist.s3-website-us-west-1.amazonaws.com/objective-c-style-guide/uncrustify-dev-snapshots/uncrustify-0.61-snapshot.zip) and install it in place of the binary used by the Xcode plugin. You should then use the ".uncrustify-061.cfg" config file (make sure you rename it to just ".uncrustify.cfg").
 
 Download my latest uncrustify snapshot:
 
@@ -79,6 +64,7 @@ Download my latest uncrustify snapshot:
 ## Table of Contents
 
 * [Language](#language)
+* [Project Organization](#project-organization)
 * [Code Organization](#code-organization)
 * [Line Wrapping (Code Width)](#line-wrapping-(code-width))
 * [Spacing](#spacing)
@@ -135,6 +121,47 @@ UIColor *myColor = [UIColor whiteColor];
 UIColor *myColour = [UIColor whiteColor];
 ```
 
+
+## Project Organization
+
+Apple provides two methods for organizing code within projects:
+
+* Groups
+* Folder references
+
+When adding folders to an Xcode project, you will be given the option to select how to treat folders. The default is to create _Groups_.
+
+The problem with using _Groups_ is that the organization is purely internal to Xcode; that is, if you look at the file structure on disk you will see that there is no organization whatsoever. As an alternative, you could use _Folder references_.
+
+Both techniques have their [pros and cons](http://vocaro.com/trevor/blog/2012/10/21/xcode-groups-vs-folder-references/). A better tactic is to use Groups with references.
+
+Refer to the following recommended folder structure for an OSX project:
+
+```
+Your_Project
+  |-- AppDelegate.h
+  |-- AppDelegate.m
+  |-- Images.xcassets
+  |-- MainMenu.xib
+  |-- Supporting Files
+  |-- Models
+  |-- Views
+  |-- Controllers
+  |-- Stores
+  |-- Helpers
+```
+
+Following initial project creation, add each of the folders by right-clicking on your project folder and selecting `New Group`. After each folder has been added, select one and view its settings in the _Identity Inspector_. Click on the gray folder icon that appears next to the Group name, under the _Location_ dropdown menu. Click on the `New Folder` button and create a new folder with the same name as the group, then click on the `Choose` button.
+
+Add new files of each type to each respective folder.
+
+### Moving existing files into the right folder
+
+If you have already create files in the project and now need to move them, you can move them at the same time as when you create a containing folder. For instance, select all of your _Views_ and the right click. Select `New Group from Selection` then name the folder accordingly. Next, select the folder and view its settings in the _Identity Inspector_. Click on the gray folder icon that appears next to the Group name, under the _Location_ dropdown menu. Click on the `New Folder` button and create a new folder with the same name as the group, then click on the `Choose` button.
+
+The final step is to move the files on disk into their respective folders.
+
+> **NOTE:** If you are using `git` you must use the `git mv` command to move these files into place, instead of any other method (`mv`, OSX Finder, etc).
 
 ## Code Organization
 
@@ -1122,6 +1149,18 @@ Singleton objects should use a thread-safe pattern for creating their shared ins
 
 This will prevent [possible and sometimes prolific crashes](http://cocoasamurai.blogspot.com/2011/04/singletons-your-doing-them-wrong.html).
 
+An optional addition to the above standard pattern is the following:
+
+```objc
+- (void)dealloc {
+
+    // implement -dealloc & remove abort() when refactoring for
+    // non-singleton use.
+    abort();
+}
+```
+
+The idea behind adding the `dealloc()` method is to provide one more defensive measure since a `dealloc` message should never be sent to a Singleton in the first place. The logic is explained in a [StackOverflow thread](http://stackoverflow.com/a/7599682).
 
 ## Line Breaks
 
