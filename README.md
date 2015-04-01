@@ -79,6 +79,7 @@ Download my latest uncrustify snapshot:
 ## Table of Contents
 
 * [Language](#language)
+* [Project Organization](#project-organization)
 * [Code Organization](#code-organization)
 * [Line Wrapping (Code Width)](#line-wrapping-(code-width))
 * [Spacing](#spacing)
@@ -135,6 +136,47 @@ UIColor *myColor = [UIColor whiteColor];
 UIColor *myColour = [UIColor whiteColor];
 ```
 
+
+## Project Organization
+
+Apple provides two methods for organizing code within projects:
+
+* Groups
+* Folder references
+
+When adding folders to an Xcode project, you will be given the option to select how to treat folders. The default is to create _Groups_.
+
+The problem with using _Groups_ is that the organization is purely internal to Xcode; that is, if you look at the file structure on disk you will see that there is no organization whatsoever. As an alternative, you could use _Folder references_.
+
+Both techniques have their [pros and cons](http://vocaro.com/trevor/blog/2012/10/21/xcode-groups-vs-folder-references/). A better tactic is to use Groups with references.
+
+Refer to the following recommended folder structure for an OSX project:
+
+```
+Your_Project
+  |-- AppDelegate.h
+  |-- AppDelegate.m
+  |-- Images.xcassets
+  |-- MainMenu.xib
+  |-- Supporting Files
+  |-- Models
+  |-- Views
+  |-- Controllers
+  |-- Stores
+  |-- Helpers
+```
+
+Following initial project creation, add each of the folders by right-clicking on your project folder and selecting `New Group`. After each folder has been added, select one and view its settings in the _Identity Inspector_. Click on the gray folder icon that appears next to the Group name, under the _Location_ dropdown menu. Click on the `New Folder` button and create a new folder with the same name as the group, then click on the `Choose` button.
+
+Add new files of each type to each respective folder.
+
+### Moving existing files into the right folder
+
+If you have already create files in the project and now need to move them, you can move them at the same time as when you create a containing folder. For instance, select all of your _Views_ and the right click. Select `New Group from Selection` then name the folder accordingly. Next, select the folder and view its settings in the _Identity Inspector_. Click on the gray folder icon that appears next to the Group name, under the _Location_ dropdown menu. Click on the `New Folder` button and create a new folder with the same name as the group, then click on the `Choose` button.
+
+The final step is to move the files on disk into their respective folders.
+
+> **NOTE:** If you are using `git` you must use the `git mv` command to move these files into place, instead of any other method (`mv`, OSX Finder, etc).
 
 ## Code Organization
 
